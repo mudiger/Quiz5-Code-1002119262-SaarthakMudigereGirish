@@ -2,56 +2,10 @@ from flask import request
 from flask import Flask
 from flask import render_template
 import os
-import passlib.pwd
-
-from bs4 import BeautifulSoup
-from pprint import pprint
-import PyPDF2, nltk, requests, io
 import regex as re
-from collections import defaultdict
-from nltk import pos_tag
-from nltk.tokenize import sent_tokenize, word_tokenize
-from nltk.probability import FreqDist
-from nltk.stem import snowball
-from nltk.corpus import stopwords
-
-# nltk.download_shell()
-# nltk.download('punkt')
-# nltk.download('stopwords')
-# nltk.download('averaged_perceptron_tagger')
-
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
-
-
-def extract_words_from_pdf(file_path):
-    # response = requests.get(file_path)
-    # pdf_content = response.content
-    #
-    # pdf_stream = io.BytesIO(pdf_content)
-    # reader = PyPDF2.PdfReader(pdf_stream)
-    response = requests.get(file_path)
-    text = response.text
-    words = []
-    sentences = []
-    # for page in text:
-    #     # page
-    #     text = page.extract_text()
-    #     # sentences
-    for sent in sent_tokenize(text):
-        # words
-        sentences.append(sent)
-        word_tokens = word_tokenize(sent)
-        words += word_tokens
-    return sentences, words
-
-
-# sentences = sent_tokenize(' '.join(words_list))
-# Specify the path to your PDF file
-pdf_file_path = r'https://storageaccount1002119262.blob.core.windows.net/assignment5-blob-1002119262-saarthakmudigeregirish/Textbook3.txt'
-# Call the function to extract words from the PDF
-words_list = extract_words_from_pdf(pdf_file_path)
 
 
 @app.route("/")
@@ -62,8 +16,44 @@ def index():
 @app.route("/page1/", methods=['GET', 'POST'])
 def page1():
 
+    def validate_password(password, vf):
+        L1, L2, IV = vf
+        if len(password) < L1 or len(password) > L2:
+            return "NotValid: Password length should be between {} and {} characters.".format(L1, L2)
 
+        if not any(char.isdigit() for char in password):
+            return "NotValid: Password should contain at least one digit."
 
+        if sum(1 for char in password if char.isupper()) < 2:
+            return "NotValid: Password should contain at least two uppercase letters."
+
+        if not any(char in '#@+-%' for char in password):
+            return "NotValid: Password should contain at least one of the characters: #@+-%."
+
+        if any(char in '!@$*' for char in password):
+            return "NotValid: Password should not contain the characters: {!@$*}."
+
+        if any(char in IV for char in password):
+            return "NotValid: Password should not contain the characters specified in the 'IV' list."
+
+        return "Valid"
+
+    # Admin enters the valid form (VF)
+    L1 = int(input("Enter the minimum password length: "))
+    L2 = int(input("Enter the maximum password length: "))
+    IV = input("Enter additional characters to exclude (IV): ")
+
+    vf = (L1, L2, IV)
+
+    # User enters the password to check (CP)
+    password = input("Enter the password to check: ")
+
+    # Validate the password
+    result = validate_password(password, vf)
+    print(result)
+
+'''
+'''
     def validate_password(password):
         policy = passlib.pwd.PasswordPolicy.from_names(
             length=8,
@@ -100,7 +90,6 @@ def page2():
         # print(texts)
 
         clean = re.compile('<.*?>')
-        print(clean)
         full_text = re.sub(clean, '', text)
         re.findall(r'<b>.*(\[|\]).*</b>', text)
 
