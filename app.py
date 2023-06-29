@@ -15,7 +15,6 @@ def index():
 '''
 @app.route("/page1/", methods=['GET', 'POST'])
 def page1():
-
     def validate_password(password, vf):
         L1, L2, IV = vf
         if len(password) < L1 or len(password) > L2:
@@ -52,8 +51,7 @@ def page1():
     result = validate_password(password, vf)
     print(result)
 
-'''
-'''
+
     def validate_password(password):
         policy = passlib.pwd.PasswordPolicy.from_names(
             length=8,
@@ -69,8 +67,10 @@ def page1():
     else:
         print("Invalid password")
     return render_template("1)Page.html")
-
 '''
+
+
+
 @app.route("/page2/", methods=['GET', 'POST'])
 def page2():
     count_list = []
