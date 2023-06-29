@@ -17,6 +17,7 @@ def index():
 def page2():
     count_list = []
     full_text = ''
+    texts = ''
     if request.method == "POST":
         text = request.form['text']
 
