@@ -6,12 +6,13 @@
 
 {% block body %}
     <form method="POST">
-        <label for="chars">Enter characters (without space):</label>
-        <input type="text" id="chars" name="chars">
+        <label for="text">Enter characters (without space):</label>
+        <input type="text" id="text" name="text">
         <input type="submit" value="Submit" placeholder="Submit"><br><br>
     </form>
 
-    {% if count_list %}
-        {{count_list}}
+    {% if texts %}
+        {{texts}}<br><br>
+        {{full_text}}
     {% endif %}
 {% endblock %}

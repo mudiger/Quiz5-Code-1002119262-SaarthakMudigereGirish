@@ -2,8 +2,12 @@ from flask import request
 from flask import Flask
 from flask import render_template
 import os
+import passlib.pwd
 
+from bs4 import BeautifulSoup
+from pprint import pprint
 import PyPDF2, nltk, requests, io
+import regex as re
 from collections import defaultdict
 from nltk import pos_tag
 from nltk.tokenize import sent_tokenize, word_tokenize
@@ -12,9 +16,9 @@ from nltk.stem import snowball
 from nltk.corpus import stopwords
 
 # nltk.download_shell()
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('averaged_perceptron_tagger')
+# nltk.download('punkt')
+# nltk.download('stopwords')
+# nltk.download('averaged_perceptron_tagger')
 
 
 app = Flask(__name__)
@@ -54,62 +58,48 @@ words_list = extract_words_from_pdf(pdf_file_path)
 def index():
     return render_template("index.html")
 
-
+'''
 @app.route("/page1/", methods=['GET', 'POST'])
 def page1():
-    # stop words
-    stwords = set(stopwords.words('english'))
-    # Using set difference to eliminate stopwords from our words
-    stopfree_words = set(words_list[0]) - stwords
-
-    nouns = []
-    noun_freq = []
-    # All the noun words
-    # Breaking to senteces
-    # for sentence in stopfree_words:
-    #     # Converting to words
-    #     words = word_tokenize(sentence)
-    tagged_words = pos_tag(stopfree_words)
-    nouns.extend([word for word, pos in tagged_words[1:] if pos.startswith('NN') and word[0].isupper()])
-
-    if request.method == "POST":
-        n = int(request.form['n'])
-
-        # Calculate the frequency distribution
-        freq_dist = FreqDist(nouns)
-        # Most common number of occurrences
-        noun_freq = freq_dist.most_common(n)
-
-    return render_template("1)Page.html", noun_freq=noun_freq)
 
 
+
+    def validate_password(password):
+        policy = passlib.pwd.PasswordPolicy.from_names(
+            length=8,
+            uppercase=2,
+            lowercase=1,
+            digits=1
+        )
+    return policy.test(password)
+
+    password = "P@ssw0rd"
+    if validate_password(password):
+        print("Valid password")
+    else:
+        print("Invalid password")
+    return render_template("1)Page.html")
+
+'''
 @app.route("/page2/", methods=['GET', 'POST'])
 def page2():
-    # convert them all to lower case and eliminate duplicates
-    lower_corpus_words = set([x.lower() for x in words_list[1]])
-
-    characters = []
-    total = 0
-    for word in lower_corpus_words:
-        for char in word:
-            characters.append(char)
-    # Calculate the frequency distribution
-    letter_freq = FreqDist(characters)
-    for letter,count in letter_freq.items():
-        total += count
-
     count_list = []
+    full_text = ''
     if request.method == "POST":
-        chars = request.form['chars']
-        mult_chars = list(chars)
+        text = request.form['text']
 
-        for i in mult_chars:
-            count = letter_freq[i]
-            count_list.append((i, count, round((count/total)*100, 2)))
+        soup = BeautifulSoup(text, 'html.parser')
+        texts = [*soup.stripped_strings]
+        print(texts)
 
-    return render_template("2)Page.html", count_list=count_list)
+        clean = re.compile('<.*?>')
+        print(clean)
+        full_text = re.sub(clean, '', text)
+        re.findall(r'<b>.*(\[|\]).*</b>', text)
 
+    return render_template("2)Page.html", full_text=full_text, texts=texts)
 
+'''
 @app.route("/page3/", methods=['GET', 'POST'])
 def page3():
     # convert them all to lower case and eliminate duplicates
@@ -158,7 +148,7 @@ def page4():
 
     return render_template("4)Page.html", w_in_s=w_in_s)
 
-
+'''
 if __name__ == "__main__":
     app.run(debug=True)
 
