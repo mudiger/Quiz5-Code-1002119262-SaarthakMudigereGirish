@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy Python app to Azure Web App - Quiz5-WebApp-1002119262-SaarthakMudigereGirish
+name: Build and deploy Python app to Azure Web App - asdfasdg
 
 on:
   push:
@@ -58,6 +58,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
-          app-name: 'Quiz5-WebApp-1002119262-SaarthakMudigereGirish'
+          app-name: 'asdfasdg'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_24A616B33A5E44C8B5CAB20D1E40A6B0 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A9C13126F0F44B4DA936F9C336453C54 }}
