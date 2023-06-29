@@ -88,9 +88,16 @@ def page2():
     if request.method == "POST":
         text = request.form['text']
 
-        soup = BeautifulSoup(text, 'html.parser')
-        texts = [*soup.stripped_strings]
-        print(texts)
+        # initializing tag
+        tag = ["b","i","h1","p"]
+        texts=[]
+        for i in tag:
+            # regex to extract required strings
+            reg_str = "<" + i + ">(.*?)</" + i + ">"
+            texts.append(re.findall(reg_str, text))
+        # soup = BeautifulSoup(text, 'html.parser')
+        # texts = [*soup.stripped_strings]
+        # print(texts)
 
         clean = re.compile('<.*?>')
         print(clean)
