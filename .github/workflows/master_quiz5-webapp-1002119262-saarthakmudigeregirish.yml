@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'Quiz5-WebApp-1002119262-SaarthakMudigereGirish'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_24A616B33A5E44C8B5CAB20D1E40A6B0 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F03F31EFB6E14FB98E2B3BF6A064BA69 }}
