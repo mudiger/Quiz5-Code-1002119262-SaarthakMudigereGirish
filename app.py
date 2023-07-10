@@ -28,9 +28,6 @@ def page2():
             # regex to extract required strings
             reg_str = "<" + i + ">(.*?)</" + i + ">"
             texts.append(re.findall(reg_str, text))
-        # soup = BeautifulSoup(text, 'html.parser')
-        # texts = [*soup.stripped_strings]
-        # print(texts)
 
         clean = re.compile('<.*?>')
         full_text = re.sub(clean, '', text)
